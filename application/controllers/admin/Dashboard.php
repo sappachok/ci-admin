@@ -17,6 +17,7 @@ class Dashboard extends Admin_Controller {
 	{
         if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
         {
+			echo "xxx"; return false;
             redirect('auth/login', 'refresh');
         }
         else
@@ -41,9 +42,7 @@ class Dashboard extends Admin_Controller {
 
 
             /* TEST */
-            $this->data['url_exist']    = is_url_exist('http://www.domprojects.com');
-
-
+            $this->data['url_exist']    = true;
             /* Load Template */
             $this->template->admin_render('admin/dashboard/index', $this->data);
         }

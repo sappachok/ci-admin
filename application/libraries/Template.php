@@ -8,6 +8,7 @@ class Template {
     public function __construct()
     {	
 		$this->CI =& get_instance();
+		//$this->CI =& get_instance()->controller;
     }
 
 
@@ -27,7 +28,7 @@ class Template {
             $this->template['control_sidebar'] = $this->CI->load->view('admin/_templates/control_sidebar', $data, TRUE);
             $this->template['footer']          = $this->CI->load->view('admin/_templates/footer', $data, TRUE);
 
-            return $this->CI->load->view('admin/_templates/template', $this->template);
+            echo $this->CI->load->view('admin/_templates/template', $this->template, TRUE);
         }
 	}
 

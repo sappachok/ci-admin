@@ -47,32 +47,34 @@ class Migrate extends CI_Controller {
 	 */
 	public function index()
 	{
+		$this->load->config('admin/dp_config');
+		$this->load->config('common/dp_config');
+
 		if ($this->migration_enabled)
 		{
 			foreach ($this->migrations as $version => $filepath)
 			{
 				$fp = explode(DIRECTORY_SEPARATOR, $filepath);
-				$data['migrations'][] = [
+				$this->data['migrations'][] = [
 					'version' => $version,
 					'file'    => $fp[count($fp) - 1],
 				];
 			}
-			$migration_db = $this->db->get($this->config->item('migration_table'))
-			                         ->row_array(1);
-			$data['current_version'] = $migration_db['version'];
+			$migration_db = $this->db->get($this->config->item('migration_table'))->row_array(1);
+			$this->data['current_version'] = $migration_db['version'];
 		}
 		else
 		{
-			$data['migration_disabled'] = TRUE;
+			$this->data['migration_disabled'] = TRUE;
 		}
 		// You can change the assets links to other versions or to be site relative
-		/*$data['assets'] = [
+		/*$this->data['assets'] = [
 			'bootstrap_css' => 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css',
 			'bootstrap_js'  => 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
 			'jquery'        => 'https://code.jquery.com/jquery-2.2.4.min.js',
 		];*/
 
-		$data['assets'] = [
+		$this->data['assets'] = [
 			'bootstrap_css' => base_url('assets/css/bootstrap.min.css'),
 			'bootstrap_js'  => base_url('assets/js/bootstrap.min.js'),
 			'jquery'        => base_url('assets/js/jquery-2.2.4.min.js'),
@@ -80,10 +82,10 @@ class Migrate extends CI_Controller {
 
 		$dbconfig = $this->get_dbconfig();
 
-		$data['dbgroups']      = $dbconfig['dbgroups'];
-		$data['active_group']  = $this->input->get('dbgroup') ? : $dbconfig['active_group'];
+		$this->data['dbgroups']      = $dbconfig['dbgroups'];
+		$this->data['active_group']  = $this->input->get('dbgroup') ? : $dbconfig['active_group'];
 
-		$this->load->view('migrate', $data);
+		$this->load->view('migrate', $this->data);
 	}
 
 
@@ -147,7 +149,6 @@ class Migrate extends CI_Controller {
 			echo json_encode(isset($response) ? $response : '');
 		}
 	}
-
 
 	/**
 	 * Token page

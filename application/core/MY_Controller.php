@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class MY_Controller extends MX_Controller
+class MY_Controller extends CI_Controller
 {
 	public function __construct()
 	{
@@ -55,7 +55,6 @@ class MY_Controller extends MX_Controller
         }
 	}
 }
-
 
 class Admin_Controller extends MY_Controller
 {

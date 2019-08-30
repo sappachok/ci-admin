@@ -11,4 +11,8 @@ class MY_Migration extends CI_Migration {
 		}
 		return $insert_data;
 	}
+
+	public function add_model($name, $param) {
+
+	}
 }

@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 ?>
 
             <aside class="main-sidebar">
@@ -84,16 +83,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
                         <li class="header text-uppercase"><?php echo $title; ?></li>
-                        <li class="<?=active_link_controller('license')?>">
-                            <a href="<?php echo site_url('admin/license'); ?>">
-                                <i class="fa fa-legal"></i> <span><?php echo lang('menu_license'); ?></span>
-                            </a>
-                        </li>
                         <li class="<?=active_link_controller('resources')?>">
                             <a href="<?php echo site_url('admin/resources'); ?>">
                                 <i class="fa fa-cubes"></i> <span><?php echo lang('menu_resources'); ?></span>
                             </a>
                         </li>
+                        <li class="header text-uppercase">Debug Tools</li>
+                        <li class="<?=active_link_controller('resources')?>">
+                            <a id="debug_btn" href="#message_debug">
+                                <i class="fa fa-cubes"></i> <span>Message Debug</span>
+                            </a>
+                        </li>                        
                     </ul>
                 </section>
             </aside>

@@ -72,6 +72,7 @@ class Admin_Controller extends MY_Controller
             $this->load->config('admin/dp_config');
             $this->load->library(['admin/breadcrumbs', 'admin/page_title']);
             $this->load->model('admin/core_model');
+            $this->load->model('admin/control_model');
             $this->load->helper('menu');
             $this->lang->load(['admin/main_header', 'admin/main_sidebar', 'admin/footer', 'admin/actions']);
 

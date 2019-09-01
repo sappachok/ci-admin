@@ -43,13 +43,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-dashboard"></i> <span><?php echo lang('menu_dashboard'); ?></span>
                             </a>
                         </li>
-                        <li class="<?=active_link_controller('pages')?>">
-                            <a href="<?php echo site_url('admin/pages'); ?>">
-                                <i class="fa fa-dashboard"></i> <span>Pages</span>
+                        <li class="header text-uppercase"><?php echo lang('menu_administration'); ?></li>
+                        <?php
+                        $admin_regist = $this->control_model->regist_models();
+                        foreach($admin_regist as $reg) {
+                        ?>
+                        <li class="<?=active_link_controller($reg->name)?>">
+                            <a href="<?php echo site_url('admin/control/'.$reg->name); ?>">
+                                <i class="<?php echo $reg->params->icon; ?>"></i> <span><?php echo $reg->params->label; ?></span>
                             </a>
                         </li>
-
-                        <li class="header text-uppercase"><?php echo lang('menu_administration'); ?></li>
+                        <?php                            
+                        }
+                        ?>                        
                         <li class="<?=active_link_controller('users')?>">
                             <a href="<?php echo site_url('admin/users'); ?>">
                                 <i class="fa fa-user"></i> <span><?php echo lang('menu_users'); ?></span>
@@ -88,6 +94,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <i class="fa fa-cubes"></i> <span><?php echo lang('menu_resources'); ?></span>
                             </a>
                         </li>
+                        <li class="<?=active_link_controller('resources')?>">
+                            <a href="<?php echo base_url('assets/themes/AdminLTE/'); ?>" target="_blank">
+                                <i class="fa fa-paint-brush"></i> <span>Themes</span>
+                            </a>
+                        </li>                        
                         <li class="header text-uppercase">Debug Tools</li>
                         <li class="<?=active_link_controller('resources')?>">
                             <a id="debug_btn" href="#message_debug">

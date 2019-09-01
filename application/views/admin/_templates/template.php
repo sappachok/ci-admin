@@ -24,7 +24,11 @@ if (isset($main_sidebar))
 
 if (isset($debug))
 {
-    echo $debug;
+	if(is_array($debug)) {
+		var_dump($debug);
+	} else {
+		echo $debug;
+	}
 }
 
 if (isset($content))

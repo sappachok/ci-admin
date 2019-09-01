@@ -13,6 +13,14 @@ class MY_Migration extends CI_Migration {
 	}
 
 	public function add_model($name, $param) {
+		$insert_data = Array(
+			"name"=>$name,
+			"param"=>json_encode($param)
+		);
+		$this->db->insert('models', $insert_data);
+	}
 
+	public function remove_model($name) {
+		$this->db->delete('models', Array("name"=>$name));
 	}
 }

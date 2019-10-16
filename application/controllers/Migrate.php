@@ -31,6 +31,7 @@ class Migrate extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper('url');
+		$this->load->helper('text');
 		$this->config->load('migration');
 		$this->migration_enabled = $this->config->item('migration_enabled');
 		if ($this->migration_enabled && uri_string() != 'migrate/token')

@@ -22,6 +22,9 @@ class Control extends Admin_Controller {
         $this->model = $model;
         //var_dump($method);
         $this->model_info = $this->control_model->get_model($model);
+		//echo $model;
+		//var_dump($this->model_info->params);
+		//return false;
         $this->page_title->push($this->model_info->params->label);
         $this->data['pagetitle'] = $this->page_title->show();
 
@@ -132,14 +135,27 @@ class Control extends Admin_Controller {
 
             if($this->model_info->params->fields)
             foreach($this->model_info->params->fields as $inp) {
-                $this->data['form_input'][] = Array(
-                    'label' => $inp->label,
-                    'name'  => $inp->name,
-                    'id'    => $inp->name,
-                    'type'  => $inp->type,
-                    'class' => 'form-control',
-                    'value' => $this->form_validation->set_value($inp->name)
-                );
+				$inp_options = (array) @$inp->options;
+				if($inp->type == "select") {
+					$this->data['form_input'][] = Array(
+						'label' => $inp->label,
+						'name'  => $inp->name,
+						'id'    => $inp->name,
+						'type'  => $inp->type,
+						'options'  => $inp_options,
+						'class' => 'form-control',
+						'value' => $this->form_validation->set_value($inp->name)
+					);
+				} else {
+					$this->data['form_input'][] = Array(
+						'label' => $inp->label,
+						'name'  => $inp->name,
+						'id'    => $inp->name,
+						'type'  => $inp->type,
+						'class' => 'form-control',
+						'value' => $this->form_validation->set_value($inp->name)
+					);
+				}
             }
             
             $this->data['action'] = Array(
@@ -150,9 +166,80 @@ class Control extends Admin_Controller {
 		}
     }
 
-    public function edit()
+    public function edit($id="")
     {
+		if ( ! $this->ion_auth->logged_in() OR ! $this->ion_auth->is_admin())
+		{
+			redirect('auth/login', 'refresh');
+		}
+		else
+		{
+            //$this->data['debug'][] = $this->model_info;
+            /* Breadcrumbs */
+            $this->breadcrumbs->unshift(2, 'Create', 'admin/control/'.$this->model);
+			$this->data['breadcrumb'] = $this->breadcrumbs->show();
+            $this->data['pagetitle'] = $this->page_title->show();
+            /* Load Template */
 
+            if($this->model_info->params->fields)
+            foreach($this->model_info->params->fields as $inp) {
+                $rules = "";
+                if(@$inp->required==true) $rules = 'required';
+
+                $this->form_validation->set_rules($inp->name, $inp->label, $rules);
+            }
+    
+            if (isset($_POST) && ! empty($_POST))
+            {
+                if ($this->_valid_csrf_nonce() === FALSE)
+                {
+                    show_error($this->lang->line('error_csrf'));
+                }
+    
+                if ($this->form_validation->run() == TRUE)
+                {
+                    $data = array();
+                    foreach($this->model_info->params->fields as $inp) {
+                        $data[$inp->name] = $this->input->post($inp->name);
+                    }
+
+                    if($this->control_model->update($this->model, $data, Array("id"=>$id)))
+                    {
+                        //$this->session->set_flashdata('message', $this->ion_auth->messages());
+                        redirect('admin/control/'.$this->model, 'refresh');
+                    }
+                    else
+                    {
+                        redirect('admin/control/'.$this->model, 'refresh');
+                    }
+    
+                }
+            }
+
+            $this->data['csrf'] = $this->_get_csrf_nonce(); 
+
+			$form_data = $this->control_model->get_record_once($this->model, Array("id"=>$id));
+
+            if($this->model_info->params->fields)
+            foreach($this->model_info->params->fields as $inp) {
+                $this->data['form_input'][] = Array(
+                    'label' => $inp->label,
+                    'name'  => $inp->name,
+                    'id'    => $inp->name,
+                    'type'  => $inp->type,
+                    'options'  => @$inp->options,
+                    'class' => 'form-control',
+                    'value' => @$form_data->{$inp->name},
+					//'value' => $this->form_validation->set_value($inp->name)
+                );
+            }
+            
+            $this->data['action'] = Array(
+                "cancel" => site_url("admin/control/".$this->model),
+            );            
+
+			$this->template->admin_render('admin_control/edit', $this->data);
+		}
     }
 
     public function view()

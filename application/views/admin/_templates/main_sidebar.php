@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
-
             <aside class="main-sidebar">
                 <section class="sidebar">
 <?php if ($admin_prefs['user_panel'] == TRUE): ?>
@@ -15,8 +14,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a href="#"><i class="fa fa-circle text-success"></i> <?php echo lang('menu_online'); ?></a>
                         </div>
                     </div>
-
 <?php endif; ?>
+
 <?php if ($admin_prefs['sidebar_form'] == TRUE): ?>
                     <!-- Search form -->
                     <form action="#" method="get" class="sidebar-form">
@@ -30,21 +29,55 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <?php endif; ?>
                     <!-- Sidebar menu -->
-                    <ul class="sidebar-menu">
+                    <ul class="sidebar-menu" data-widget="tree">
                         <li>
                             <a href="<?php echo site_url('/'); ?>">
                                 <i class="fa fa-home text-primary"></i> <span><?php echo lang('menu_access_website'); ?></span>
                             </a>
                         </li>
 
-                        <li class="header text-uppercase"><?php echo lang('menu_main_navigation'); ?></li>
-                        <li class="<?=active_link_controller('dashboard')?>">
-                            <a href="<?php echo site_url('admin/dashboard'); ?>">
-                                <i class="fa fa-dashboard"></i> <span><?php echo lang('menu_dashboard'); ?></span>
-                            </a>
-                        </li>
+						<li class="header">MAIN NAVIGATION</li>
+						<li class="treeview">
+						  <a href="#">
+							<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+							<span class="pull-right-container">
+							  <i class="fa fa-angle-left pull-right"></i>
+							</span>
+						  </a>
+						  <ul class="treeview-menu">
+							<li><a href="../../index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
+							<li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+						  </ul>
+						</li>
                         <li class="header text-uppercase"><?php echo lang('menu_administration'); ?></li>
+
                         <?php
+						$group_regist = $this->control_model->regist_group_model();
+
+						foreach($group_regist as $grp) {
+						?>
+                        <li class="treeview active">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i>
+                                <span><?php echo $grp->params->label; ?></span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+						<?php
+							if($grp->model)
+							foreach($grp->model as $model) {
+						?>
+                            <ul class="treeview-menu">
+                                <li class=""><a href="<?php echo site_url('admin/control/').$model->model; ?>"><i class="fa fa-circle-o"></i> <?php echo $model->label; ?></a></li>
+                            </ul>
+						<?php
+						}
+						?>
+                        </li>
+						<?php
+						}
+						?>
+
+						<?php
                         $admin_regist = $this->control_model->regist_models();
                         foreach($admin_regist as $reg) {
                         ?>
@@ -55,7 +88,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </li>
                         <?php                            
                         }
-                        ?>                        
+                        ?>
+
+                        <li class="treeview <?=active_link_controller('prefs')?>">
+                            <a href="#">
+                                <i class="fa fa-circle-o"></i>
+                                <span><?php echo lang('menu_preferences'); ?></span>
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li class="<?=active_link_function('interfaces')?>"><a href="<?php echo site_url('admin/prefs/interfaces/admin'); ?>"><i class="fa fa-circle-o"></i> <?php echo lang('menu_interfaces'); ?></a></li>
+                            </ul>
+                        </li>
+						
                         <li class="<?=active_link_controller('users')?>">
                             <a href="<?php echo site_url('admin/users'); ?>">
                                 <i class="fa fa-user"></i> <span><?php echo lang('menu_users'); ?></span>

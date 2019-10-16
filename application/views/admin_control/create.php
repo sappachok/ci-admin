@@ -19,20 +19,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <div class="box-body">
                                     <?php //echo $message;?>
 
-                                    <?php echo form_open(current_url(), array('class' => 'form-horizontal', 'id' => 'form-create_user')); ?>
+                                    <?php echo form_open(current_url(), array('class' => '', 'id' => 'form-create')); ?>
 									<?php foreach($form_input as $key => $inp) : ?>
                                         <div class="form-group">
 											<label for="<?php echo $inp["id"]; ?>" class="col-sm-2 control-label"><?php echo $inp["label"]; ?></label>
                                             <div class="col-sm-10">
+							                <div class="form-group">
                                             <?php 
 											if($inp["type"]=="text") echo form_input($inp);
 											else if($inp["type"]=="select") {
                                                 $options = Array(""=>"Please Select");
+												if(@$inp["options"]) {
+													$inp_options = Array();
+													$inp_options = (array) $inp["options"];
+												}
+												//if(@$inp["options"]) $options = $inp["options"];
                                                 echo form_dropdown($inp, $options, $inp["value"]);
-                                            } else if($inp["type"]=="textarea") echo form_textarea($inp);
+                                            } else if($inp["type"]=="textarea") {
+												echo form_textarea($inp);
+											}
 
 											echo form_error($inp["name"], '<div class="error">', '</div>');
 											?>
+											</div>
                                             </div>
                                         </div>
 									<?php endforeach ?>
